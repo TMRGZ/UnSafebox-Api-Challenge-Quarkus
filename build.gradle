@@ -8,7 +8,10 @@ plugins {
 
 group = 'com.rviewer.skeletons'
 version = '1.0.0'
-sourceCompatibility = '17'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
 
 configurations {
     compileOnly {
@@ -33,11 +36,10 @@ dependencies {
     testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
 
 test {
+    useJUnitPlatform()
+
     testLogging {
         events "PASSED", "SKIPPED", "FAILED"
     }
@@ -67,7 +69,7 @@ jacocoTestReport {
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     testLogging {
         events TestLogEvent.FAILED,
                 TestLogEvent.PASSED
