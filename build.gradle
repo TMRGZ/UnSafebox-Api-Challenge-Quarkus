@@ -1,9 +1,12 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
 plugins {
     id 'org.springframework.boot' version '3.1.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'groovy'
     id 'jacoco'
+    id "org.openapi.generator" version "6.6.0"
 }
 
 group = 'com.rviewer.skeletons'
@@ -27,15 +30,42 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springdoc:springdoc-openapi-starter-common:2.0.2'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'com.h2database:h2:2.1.212'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
+    testImplementation 'com.h2database:h2:2.1.212'
 }
 
+tasks.register('buildServer', GenerateTask) {
+    generatorName = "spring"
+    inputSpec = "$rootDir/api/open-api.spec.yaml"
+    apiPackage = "com.rviewer.skeletons.infrastructure.controller"
+    modelPackage = "com.rviewer.skeletons.application.model"
+    outputDir = "$buildDir/generated/sources".toString()
+    modelNameSuffix = "Dto"
+    configOptions = [
+            interfaceOnly        : "true",
+            performBeanValidation: "true",
+            useSpringBoot3       : "true"
+    ]
+
+}
+
+tasks.compileJava.dependsOn(buildServer)
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/sources/src/main/java"
+        }
+    }
+}
 
 test {
     useJUnitPlatform()
