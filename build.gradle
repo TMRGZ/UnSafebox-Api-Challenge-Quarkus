@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
@@ -28,18 +30,18 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     implementation 'org.springdoc:springdoc-openapi-starter-common:2.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:3.1.1'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'io.r2dbc:r2dbc-postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
-    testImplementation 'com.h2database:h2:2.1.212'
+    testImplementation 'io.r2dbc:r2dbc-h2'
 }
 
 tasks.register('buildServer', GenerateTask) {
@@ -52,7 +54,9 @@ tasks.register('buildServer', GenerateTask) {
     configOptions = [
             interfaceOnly        : "true",
             performBeanValidation: "true",
-            useSpringBoot3       : "true"
+            useSpringBoot3       : "true",
+            reactive             : "true",
+            additionalModelTypeAnnotations : "@lombok.Generated"
     ]
 
 }
@@ -78,7 +82,7 @@ test {
 }
 
 jacoco {
-    toolVersion = "0.8.8"
+    toolVersion = "0.8.10"
     reportsDirectory = file("$buildDir/reports/jacoco")
 }
 
@@ -96,9 +100,6 @@ jacocoTestReport {
 ************************ Task to obtain a clear test report ************************
 ************************************************************************************
 */
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 tasks.withType(Test).configureEach {
     testLogging {
         events TestLogEvent.FAILED,
