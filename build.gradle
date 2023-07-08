@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'io.r2dbc:r2dbc-postgresql'
+    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
