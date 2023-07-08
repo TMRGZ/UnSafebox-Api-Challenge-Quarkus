@@ -11,6 +11,4 @@ public interface SafeboxApplicationService {
 
     Mono<ResponseEntity<CreatedSafeboxResponseDto>> createSafebox(Mono<SafeboxRequestDto> safeboxRequestDto);
 
-    Mono<ResponseEntity<Void>> saveSafeboxItems(Long id, Flux<SafeboxItemDto> safeboxItemDto);
-
 }

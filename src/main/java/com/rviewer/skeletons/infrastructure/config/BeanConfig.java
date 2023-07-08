@@ -14,9 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfig {
 
     @Bean
-    public SafeboxService safeboxService(SafeboxRepository safeboxRepository, PasswordManager passwordManager,
-                                         ItemService itemService) {
-        return new SafeboxServiceImpl(safeboxRepository, passwordManager, itemService);
+    public SafeboxService safeboxService(SafeboxRepository safeboxRepository, PasswordManager passwordManager) {
+        return new SafeboxServiceImpl(safeboxRepository, passwordManager);
     }
 
     @Bean

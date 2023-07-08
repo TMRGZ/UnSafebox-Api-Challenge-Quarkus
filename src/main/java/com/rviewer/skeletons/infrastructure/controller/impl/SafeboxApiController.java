@@ -34,6 +34,6 @@ public class SafeboxApiController implements SafeboxApi {
 
     @Override
     public Mono<ResponseEntity<Void>> saveSafeboxItems(Long id, Flux<SafeboxItemDto> safeboxItemDto, ServerWebExchange exchange) {
-        return safeboxApplicationService.saveSafeboxItems(id, safeboxItemDto);
+        return itemApplicationService.saveSafeboxItems(id, safeboxItemDto);
     }
 }

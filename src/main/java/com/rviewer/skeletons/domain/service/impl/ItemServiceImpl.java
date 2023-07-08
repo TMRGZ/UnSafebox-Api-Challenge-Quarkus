@@ -18,7 +18,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Mono<Item> save(Item item) {
-        return itemRepository.save(item);
+    public Mono<Item> save(Long safeboxId, Item item) {
+        Item itemToSave = item.toBuilder().safeboxId(safeboxId).build();
+        return itemRepository.save(itemToSave);
     }
 }

@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 public interface ItemService {
     Flux<Item> getItems(Long safeboxId);
 
-    Mono<Item> save(Item item);
+    Mono<Item> save(Long safeboxId, Item item);
 }

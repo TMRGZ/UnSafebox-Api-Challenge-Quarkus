@@ -16,8 +16,6 @@ public class SafeboxServiceImpl implements SafeboxService {
 
     private final PasswordManager passwordManager;
 
-    private final ItemService itemService;
-
     @Override
     public Mono<Long> createSafebox(String safeboxName, String safeboxPassword) {
         return safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword))
@@ -34,11 +32,5 @@ public class SafeboxServiceImpl implements SafeboxService {
     @Override
     public Mono<Safebox> getSafebox(String name) {
         return safeboxRepository.findByNameIgnoreCase(name);
-    }
-
-    @Override
-    public Mono<Item> saveItem(Long safeboxId, Item itemToSave) {
-        Item item = itemToSave.toBuilder().safeboxId(safeboxId).build();
-        return itemService.save(item);
     }
 }

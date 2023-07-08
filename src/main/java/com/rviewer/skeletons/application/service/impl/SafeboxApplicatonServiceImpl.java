@@ -28,11 +28,4 @@ public class SafeboxApplicatonServiceImpl implements SafeboxApplicationService {
                 .map(CreatedSafeboxResponseDto::new)
                 .map(responseBody -> ResponseEntity.status(HttpStatus.CREATED).body(responseBody));
     }
-
-    @Override
-    public Mono<ResponseEntity<Void>> saveSafeboxItems(Long id, Flux<SafeboxItemDto> safeboxItemDto) {
-        return safeboxItemDto.map(itemDtoMapper::map)
-                .flatMap(item -> safeboxService.saveItem(id, item))
-                .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED).build()));
-    }
 }
