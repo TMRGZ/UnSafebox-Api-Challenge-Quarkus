@@ -32,10 +32,8 @@ public class SafeboxServiceImpl implements SafeboxService {
     }
 
     @Override
-    public Mono<Safebox> openSafebox(String name, String password) {
-        return safeboxRepository.findByNameIgnoreCase(name)
-                .filter(safebox -> passwordManager.matches(password, safebox.getPassword()))
-                .next();
+    public Mono<Safebox> getSafebox(String name) {
+        return safeboxRepository.findByNameIgnoreCase(name);
     }
 
     @Override
