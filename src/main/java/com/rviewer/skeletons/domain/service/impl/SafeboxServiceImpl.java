@@ -3,7 +3,7 @@ package com.rviewer.skeletons.domain.service.impl;
 import com.rviewer.skeletons.domain.exception.SafeboxDoesNotExistException;
 import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.domain.repository.SafeboxRepository;
-import com.rviewer.skeletons.domain.service.PasswordEncoder;
+import com.rviewer.skeletons.domain.service.PasswordManager;
 import com.rviewer.skeletons.domain.service.SafeboxAuthService;
 import com.rviewer.skeletons.domain.service.SafeboxService;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,13 @@ public class SafeboxServiceImpl implements SafeboxService, SafeboxAuthService {
 
     private final SafeboxRepository safeboxRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordManager passwordManager;
 
     @Override
     public String createSafebox(String safeboxName, String safeboxPassword) {
         Safebox safebox = Safebox.builder()
                 .name(safeboxName)
-                .password(passwordEncoder.encode(safeboxPassword))
+                .password(passwordManager.encode(safeboxPassword))
                 .build();
 
         return safeboxRepository.save(safebox).getId();
@@ -31,7 +31,7 @@ public class SafeboxServiceImpl implements SafeboxService, SafeboxAuthService {
     @Override
     public List<String> openSafebox(String name, String password) {
         return safeboxRepository.findByNameIgnoreCase(name).stream()
-                .filter(safebox -> passwordEncoder.matches(password, safebox.getPassword()))
+                .filter(safebox -> passwordManager.matches(password, safebox.getPassword()))
                 .map(Safebox::getId)
                 .toList();
     }

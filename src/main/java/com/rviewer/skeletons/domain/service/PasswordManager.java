@@ -1,6 +1,6 @@
 package com.rviewer.skeletons.domain.service;
 
-public interface PasswordEncoder {
+public interface PasswordManager {
 
     String encode(String password);
 
