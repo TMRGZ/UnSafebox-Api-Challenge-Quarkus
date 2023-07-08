@@ -1,13 +1,16 @@
 package com.rviewer.skeletons.domain.service;
 
-import java.util.List;
+import com.rviewer.skeletons.domain.model.Item;
+import com.rviewer.skeletons.domain.model.Safebox;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface SafeboxService {
 
-    String createSafebox(String safeboxName, String safeboxPassword);
+    Mono<Long> createSafebox(String safeboxName, String safeboxPassword);
 
-    List<String> getSafeboxItems(String safeboxId);
+    Mono<Safebox> openSafebox(String name, String password);
 
-    void saveSafeboxItems(String safeboxId, List<String> itemsToSave);
+    void saveSafeboxItems(Long safeboxId, Flux<Item> itemsToSave);
 
 }

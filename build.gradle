@@ -55,11 +55,11 @@ tasks.register('buildServer', GenerateTask) {
     outputDir = "$buildDir/generated/sources".toString()
     modelNameSuffix = "Dto"
     configOptions = [
-            interfaceOnly        : "true",
-            performBeanValidation: "true",
-            useSpringBoot3       : "true",
-            reactive             : "true",
-            additionalModelTypeAnnotations : "@lombok.Generated"
+            interfaceOnly                 : "true",
+            performBeanValidation         : "true",
+            useSpringBoot3                : "true",
+            reactive                      : "true",
+            additionalModelTypeAnnotations: "@lombok.Generated"
     ]
 
 }
