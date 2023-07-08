@@ -162,6 +162,7 @@ components:
         password:
           description: Safebox Password
           type: string
+          pattern: '^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*\d)(?=.*[a-z]).{8,}$'
       required:
         - name
         - password
