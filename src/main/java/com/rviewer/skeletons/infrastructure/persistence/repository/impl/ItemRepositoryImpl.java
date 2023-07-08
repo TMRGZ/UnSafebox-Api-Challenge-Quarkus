@@ -7,6 +7,7 @@ import com.rviewer.skeletons.infrastructure.persistence.repository.ReactiveItemR
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Component
 public class ItemRepositoryImpl implements ItemRepository {
@@ -20,5 +21,10 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Flux<Item> findBySafeboxId(Long safeboxId) {
         return reactiveItemRepository.findBySafeboxId(safeboxId).map(itemMapper::map);
+    }
+
+    @Override
+    public Mono<Item> save(Item item) {
+        return reactiveItemRepository.save(itemMapper.map(item)).map(itemMapper::map);
     }
 }
