@@ -1,15 +1,14 @@
 package com.rviewer.skeletons.domain.repository;
 
 import com.rviewer.skeletons.domain.model.Safebox;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface SafeboxRepository {
 
-    Optional<Safebox> findById(String safeboxId);
+    Mono<Safebox> findById(Long safeboxId);
 
-    List<Safebox> findByNameIgnoreCase(String name);
+    Flux<Safebox> findByNameIgnoreCase(String name);
 
-    Safebox save(Safebox safebox);
+    Mono<Safebox> save(Safebox safebox);
 }

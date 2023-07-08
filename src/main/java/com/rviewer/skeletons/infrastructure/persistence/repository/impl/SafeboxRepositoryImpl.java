@@ -2,25 +2,34 @@ package com.rviewer.skeletons.infrastructure.persistence.repository.impl;
 
 import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.domain.repository.SafeboxRepository;
+import com.rviewer.skeletons.infrastructure.mapper.SafeboxMapper;
+import com.rviewer.skeletons.infrastructure.persistence.repository.ReactiveSafeboxRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Component
 public class SafeboxRepositoryImpl implements SafeboxRepository {
+
+    @Autowired
+    private ReactiveSafeboxRepository reactiveSafeboxRepository;
+
+    @Autowired
+    private SafeboxMapper safeboxMapper;
+
     @Override
-    public Optional<Safebox> findById(String safeboxId) {
-        return Optional.empty();
+    public Mono<Safebox> findById(Long safeboxId) {
+        return reactiveSafeboxRepository.findById(safeboxId).map(safeboxMapper::map);
     }
 
     @Override
-    public List<Safebox> findByNameIgnoreCase(String name) {
-        return null;
+    public Flux<Safebox> findByNameIgnoreCase(String name) {
+        return reactiveSafeboxRepository.findByNameIgnoreCase(name).map(safeboxMapper::map);
     }
 
     @Override
-    public Safebox save(Safebox safebox) {
-        return null;
+    public Mono<Safebox> save(Safebox safebox) {
+        return reactiveSafeboxRepository.save(safeboxMapper.map(safebox)).map(safeboxMapper::map);
     }
 }
