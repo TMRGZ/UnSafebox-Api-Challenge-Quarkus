@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.function.Function;
+
 @Service
 public class SafeboxApplicatonServiceImpl implements SafeboxApplicationService {
 
@@ -25,6 +27,7 @@ public class SafeboxApplicatonServiceImpl implements SafeboxApplicationService {
     @Override
     public Mono<ResponseEntity<CreatedSafeboxResponseDto>> createSafebox(Mono<SafeboxRequestDto> safeboxRequestDto) {
         return safeboxRequestDto.map(request -> safeboxService.createSafebox(request.getName(), request.getPassword()))
+                .flatMap(Function.identity())
                 .map(CreatedSafeboxResponseDto::new)
                 .map(responseBody -> ResponseEntity.status(HttpStatus.CREATED).body(responseBody));
     }

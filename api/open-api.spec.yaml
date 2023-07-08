@@ -48,7 +48,8 @@ paths:
           description: Safebox Id
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: Safebox contents correctly retrieved
@@ -82,7 +83,8 @@ paths:
           description: Safebox id
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         required: true
         content:
@@ -144,7 +146,8 @@ components:
       properties:
         id:
           description: Safebox id
-          type: string
+          type: integer
+          format: int64
       required:
         - id
       example:

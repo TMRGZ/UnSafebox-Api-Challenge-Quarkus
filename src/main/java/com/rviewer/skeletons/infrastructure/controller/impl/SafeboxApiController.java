@@ -15,16 +15,16 @@ public class SafeboxApiController implements SafeboxApi {
 
     @Override
     public Mono<ResponseEntity<CreatedSafeboxResponseDto>> createSafebox(Mono<SafeboxRequestDto> safeboxRequestDto, ServerWebExchange exchange) {
-        return SafeboxApi.super.createSafebox(safeboxRequestDto, exchange);
+        return safeboxApplicationService.createSafebox(safeboxRequestDto);
     }
 
     @Override
-    public Mono<ResponseEntity<Flux<SafeboxItemDto>>> getSafeboxItems(String id, ServerWebExchange exchange) {
-        return SafeboxApi.super.getSafeboxItems(id, exchange);
+    public Mono<ResponseEntity<Flux<SafeboxItemDto>>> getSafeboxItems(Long id, ServerWebExchange exchange) {
+        return itemApplicationService.getSafeboxItems(id);
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> saveSafeboxItems(String id, Flux<SafeboxItemDto> safeboxItemDto, ServerWebExchange exchange) {
-        return SafeboxApi.super.saveSafeboxItems(id, safeboxItemDto, exchange);
+    public Mono<ResponseEntity<Void>> saveSafeboxItems(Long id, Flux<SafeboxItemDto> safeboxItemDto, ServerWebExchange exchange) {
+        return safeboxApplicationService.saveSafeboxItems(id, safeboxItemDto);
     }
 }
