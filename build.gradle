@@ -31,26 +31,29 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-    implementation 'org.springdoc:springdoc-openapi-starter-common:2.0.2'
+    implementation 'org.springdoc:springdoc-openapi-starter-common:2.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux:3.1.1'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
     implementation 'org.mapstruct:mapstruct:1.4.0.Final'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
-    runtimeOnly 'org.postgresql:postgresql'
-    implementation "org.liquibase:liquibase-core"
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.0.Final'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.boot:spring-security-test'
+    // Testing
     testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test:6.1.1'
+    // Database
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
     testImplementation 'io.r2dbc:r2dbc-h2'
-
+    // Liquibase
+    implementation "org.liquibase:liquibase-core"
     // Liquibase Plugin
     liquibaseRuntime 'org.liquibase:liquibase-core:4.16.1'
     liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
