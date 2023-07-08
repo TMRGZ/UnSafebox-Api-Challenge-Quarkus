@@ -18,11 +18,6 @@ public class SafeboxRepositoryImpl implements SafeboxRepository {
     private SafeboxMapper safeboxMapper;
 
     @Override
-    public Mono<Safebox> findById(Long safeboxId) {
-        return reactiveSafeboxRepository.findById(safeboxId).map(safeboxMapper::map);
-    }
-
-    @Override
     public Mono<Safebox> findByNameIgnoreCase(String name) {
         return reactiveSafeboxRepository.findByNameIgnoreCase(name).map(safeboxMapper::map);
     }

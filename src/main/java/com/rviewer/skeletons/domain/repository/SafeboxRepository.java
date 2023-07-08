@@ -5,8 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface SafeboxRepository {
 
-    Mono<Safebox> findById(Long safeboxId);
-
     Mono<Safebox> findByNameIgnoreCase(String name);
 
     Mono<Safebox> save(Safebox safebox);
