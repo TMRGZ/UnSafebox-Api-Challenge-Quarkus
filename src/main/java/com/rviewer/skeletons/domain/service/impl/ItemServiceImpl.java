@@ -1,0 +1,24 @@
+package com.rviewer.skeletons.domain.service.impl;
+
+import com.rviewer.skeletons.domain.model.Item;
+import com.rviewer.skeletons.domain.repository.ItemRepository;
+import com.rviewer.skeletons.domain.service.ItemService;
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@RequiredArgsConstructor
+public class ItemServiceImpl implements ItemService {
+
+    private final ItemRepository itemRepository;
+
+    @Override
+    public Flux<Item> getItems(Long safeboxId) {
+        return itemRepository.findBySafeboxId(safeboxId);
+    }
+
+    @Override
+    public Mono<Item> save(Item item) {
+        return itemRepository.save(item);
+    }
+}
