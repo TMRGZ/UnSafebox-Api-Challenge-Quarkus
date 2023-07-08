@@ -15,9 +15,8 @@ public class SafeboxServiceImpl implements SafeboxService {
     private final PasswordManager passwordManager;
 
     @Override
-    public Mono<Long> createSafebox(String safeboxName, String safeboxPassword) {
-        return safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword))
-                .map(Safebox::getId);
+    public Mono<Safebox> createSafebox(String safeboxName, String safeboxPassword) {
+        return safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword));
     }
 
     private Safebox generateEncodedSafebox(String safeboxName, String safeboxPassword) {

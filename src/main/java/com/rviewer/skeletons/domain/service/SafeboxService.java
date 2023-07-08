@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface SafeboxService {
 
-    Mono<Long> createSafebox(String safeboxName, String safeboxPassword);
+    Mono<Safebox> createSafebox(String safeboxName, String safeboxPassword);
 
     Mono<Safebox> getSafebox(String name);
 
