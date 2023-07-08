@@ -23,7 +23,8 @@ public class SafeboxApiController implements SafeboxApi {
     private ItemApplicationService itemApplicationService;
 
     @Override
-    public Mono<ResponseEntity<CreatedSafeboxResponseDto>> createSafebox(Mono<SafeboxRequestDto> safeboxRequestDto, ServerWebExchange exchange) {
+    public Mono<ResponseEntity<CreatedSafeboxResponseDto>> createSafebox(Mono<SafeboxRequestDto> safeboxRequestDto,
+                                                                         ServerWebExchange exchange) {
         return safeboxApplicationService.createSafebox(safeboxRequestDto);
     }
 
@@ -33,7 +34,8 @@ public class SafeboxApiController implements SafeboxApi {
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> saveSafeboxItems(Long id, Flux<SafeboxItemDto> safeboxItemDto, ServerWebExchange exchange) {
+    public Mono<ResponseEntity<Void>> saveSafeboxItems(Long id, Flux<SafeboxItemDto> safeboxItemDto,
+                                                       ServerWebExchange exchange) {
         return itemApplicationService.saveSafeboxItems(id, safeboxItemDto);
     }
 }
