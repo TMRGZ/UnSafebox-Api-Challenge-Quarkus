@@ -9,6 +9,7 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id "org.openapi.generator" version "6.6.0"
+    id 'org.liquibase.gradle' version '2.2.0'
 }
 
 group = 'com.rviewer.skeletons'
@@ -40,11 +41,32 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation "org.liquibase:liquibase-core"
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.0.Final'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
     testImplementation 'io.r2dbc:r2dbc-h2'
+
+    // Liquibase Plugin
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.16.1'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
+    liquibaseRuntime 'info.picocli:picocli:4.6.1'
+    liquibaseRuntime 'org.postgresql:postgresql'
+}
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'build/liquibase_change_log.yaml'
+            url 'jdbc:postgresql://localhost:5432/postgres_rv_database'
+            username 'rv_user'
+            password 'rv_password'
+            driver 'org.postgresql.Driver'
+        }
+    }
 }
 
 tasks.register('buildServer', GenerateTask) {
