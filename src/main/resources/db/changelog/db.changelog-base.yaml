@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: TMRGZ
+      changes:
+        - createTable:
+            tableName: SAFEBOX
+            columns:
+              - column:
+                  name: _ID
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: _NAME
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: _PASSWORD
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 002
+      author: TMRGZ
+      changes:
+        - createTable:
+            tableName: ITEM
+            columns:
+              - column:
+                  name: _ID
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: _CONTENT
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: SAFEBOX_ID
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: SAFEBOX_TO_ITEM
+            baseTableName: ITEM
+            baseColumnNames: SAFEBOX_ID
+            referencedTableName: SAFEBOX
+            referencedColumnNames: _ID
