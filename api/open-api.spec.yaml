@@ -9,6 +9,7 @@ info:
 paths:
   /safebox:
     post:
+      operationId: create-safebox
       summary: Creates a new safebox
       description: |
         Creates a new safebox based on a non-empty name and a password.
@@ -17,44 +18,25 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  description: Safebox Name
-                  type: string
-                password:
-                  description: Safebox Password
-                  type: string
-              required:
-                - name
-                - password
-              example:
-                name: Secure safebox 01
-                password: extremelySecurePassword
+              $ref: '#/components/schemas/SafeboxRequest'
+
       responses:
         '200':
           description: Safebox correctly created
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    description: Safebox id
-                    type: string
-                required:
-                  - id
-                example:
-                  id: f626c808-648c-41fe-865d-c6062f3e0899
+                $ref: '#/components/schemas/CreatedSafeboxResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '409':
           description: Safebox already exists
-        '422':
-          description: Malformed expected data
         '500':
-          description: Unexpected API error
+          $ref: '#/components/responses/InternalServerError'
 
   /safebox/{id}/items:
     get:
+      operationId: get-safebox-items
       summary: Retrieves the content of a safebox
       description: |
         Retrieves the currently stored contents in the safebox identified by the given ID
@@ -73,30 +55,22 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  items:
-                    description: Safebox items
-                    type: array
-                    items:
-                      type: string
-                required:
-                  - items
-                example:
-                  items:
-                    - Safebox content 03
-                    - Safebox content 02
-                    - Safebox content 01
+                type: array
+                items:
+                  $ref: '#/components/schemas/SafeboxItem'
+
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: Specified Basic Auth does not match
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          description: Requested safebox does not exist
-        '422':
-          description: Malformed expected data
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Unexpected API error
+          $ref: '#/components/responses/InternalServerError'
 
     put:
+      operationId: save-safebox-items
       summary: Add an items to a Safebox
       description: |
         Inserts new contents in the safebox identified by the given ID and with the given Basic Auth
@@ -114,32 +88,21 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                items:
-                  description: Safebox items
-                  type: array
-                  items:
-                    type: string
-              required:
-                - items
-              example:
-                items:
-                  - Safebox content 03
-                  - Safebox content 02
-                  - Safebox content 01
-                  - New safebox content
+              type: array
+              items:
+                $ref: '#/components/schemas/SafeboxItem'
+
       responses:
-        '200':
+        '201':
           description: Content correctly added to the safebox
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: Specified Basic Auth does not match
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          description: Requested safebox does not exist
-        '422':
-          description: Malformed expected data
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Unexpected API error
+          $ref: '#/components/responses/InternalServerError'
 
 
 components:
@@ -147,3 +110,79 @@ components:
     basicPassword:
       type: http
       scheme: basic
+
+  responses:
+    BadRequest:
+      description: Malformed expected data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Requested safebox does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Specified Basic Auth does not match
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Unexpected API error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    CreatedSafeboxResponse:
+      description: Response when Safebox is created
+      type: object
+      properties:
+        id:
+          description: Safebox id
+          type: string
+      required:
+        - id
+      example:
+        id: f626c808-648c-41fe-865d-c6062f3e0899
+    SafeboxRequest:
+      description: Safebox request
+      type: object
+      properties:
+        name:
+          description: Safebox Name
+          type: string
+        password:
+          description: Safebox Password
+          type: string
+      required:
+        - name
+        - password
+      example:
+        name: Secure safebox 01
+        password: extremelySecurePassword
+    SafeboxItem:
+      description: Safebox item
+      type: object
+      properties:
+        content:
+          description: Item content
+          type: string
+
+      required:
+        - items
+      example:
+        item: Safebox content 03
+          -
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: This is an error
+
