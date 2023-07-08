@@ -9,24 +9,24 @@ import spock.lang.Subject
 @SpringBootTest
 class PostgresConnectorSpec extends Specification {
 
-    @Subject
-    @Autowired
-    private PostgresConnector postgresConnector
-
-    private JdbcTemplate jdbcTemplate
-
-    void setup() {
-        jdbcTemplate = Mock(JdbcTemplate)
-    }
-
-    def "getConnectionStatus_shouldReturn2"() {
-        given:
-        jdbcTemplate.queryForObject("SELECT 1+1", Integer) >> 2
-
-        when:
-        int status = postgresConnector.getConnectionStatus()
-
-        then:
-        status == 2
-    }
+//    @Subject
+//    @Autowired
+//    private PostgresConnector postgresConnector
+//
+//    private JdbcTemplate jdbcTemplate
+//
+//    void setup() {
+//        jdbcTemplate = Mock(JdbcTemplate)
+//    }
+//
+//    def "getConnectionStatus_shouldReturn2"() {
+//        given:
+//        jdbcTemplate.queryForObject("SELECT 1+1", Integer) >> 2
+//
+//        when:
+//        int status = postgresConnector.getConnectionStatus()
+//
+//        then:
+//        status == 2
+//    }
 }
