@@ -2,11 +2,11 @@ spring:
   application:
     name: Unsafebox API
   r2dbc:
-    url: r2dbc:postgresql://postgres-skeleton-db:5432/postgres_rv_database
+    url: r2dbc:postgresql://localhost:5432/postgres_rv_database
     username: rv_user
     password: rv_password
-
-
-
-#    spring.datasource.initialization-mode=always
-#    spring.datasource.driverClassName=org.postgresql.Driver
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/postgres_rv_database
+    user: rv_user
+    password: rv_password
+    driver-class-name: org.postgresql.Driver
