@@ -22,6 +22,7 @@ public class SecurityConfig {
         return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec -> {
                     authorizeExchangeSpec.pathMatchers(HttpMethod.POST, "/safebox").permitAll();
+                    authorizeExchangeSpec.pathMatchers("/v3/api-docs/**", "/swagger-ui.html", "/webjars/swagger-ui/**").permitAll();
                     authorizeExchangeSpec.anyExchange().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
