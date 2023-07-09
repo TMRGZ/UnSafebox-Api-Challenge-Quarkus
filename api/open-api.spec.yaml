@@ -116,28 +116,12 @@ components:
   responses:
     BadRequest:
       description: Malformed expected data
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Requested safebox does not exist
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Specified Basic Auth does not match
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Unexpected API error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
 
   schemas:
     CreatedSafeboxResponse:
@@ -181,12 +165,4 @@ components:
         - items
       example:
         item: Safebox content 03
-          -
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-      example:
-        message: This is an error
 
