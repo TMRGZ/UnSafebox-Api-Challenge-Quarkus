@@ -123,7 +123,7 @@ class SafeboxApiControllerIntegrationSpec extends AbstractControllerIntegrationS
         response.expectStatus().isCreated()
         and: "That there is a new item related to the safebox"
         def relatedItems = reactiveItemRepository.findBySafeboxId(safeboxId).collectList().block()
-        relatedItems.stream().filter {it.content == itemContent}.findAny().isPresent()
+        relatedItems.stream().filter { it.content == itemContent }.findAny().isPresent()
     }
 
     def "Calling the put safebox items with an non existing safebox id results in a 404"() {

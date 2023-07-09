@@ -40,7 +40,7 @@ class SafeboxApplicationServiceImplUnitSpec extends Specification {
         StepVerifier.create(response)
                 .expectNextMatches { responseEntity ->
                     responseEntity?.getStatusCode() == HttpStatus.CREATED
-                    && responseEntity.getBody().getId() == generatedId
+                            && responseEntity.getBody().getId() == generatedId
                 }
                 .expectComplete()
                 .verify()

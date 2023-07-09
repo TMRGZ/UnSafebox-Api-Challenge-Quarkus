@@ -58,7 +58,7 @@ class ItemApplicationServiceImplUnitSpec extends Specification {
     }
 
     def "Giving an existing safebox id, the items get saved and related to it"() {
-        given:  "An existing safebox id"
+        given: "An existing safebox id"
         Long safeboxId = 0
         and: "A related item"
         def item = Item.builder().safeboxId(safeboxId).build()
