@@ -1,6 +1,5 @@
 package com.rviewer.skeletons.application.service.impl;
 
-import com.rviewer.skeletons.application.mapper.ItemDtoMapper;
 import com.rviewer.skeletons.application.model.CreatedSafeboxResponseDto;
 import com.rviewer.skeletons.application.model.SafeboxRequestDto;
 import com.rviewer.skeletons.application.service.SafeboxApplicationService;
@@ -17,9 +16,6 @@ public class SafeboxApplicatonServiceImpl implements SafeboxApplicationService {
 
     @Autowired
     private SafeboxService safeboxService;
-
-    @Autowired
-    private ItemDtoMapper itemDtoMapper;
 
     @Override
     public Mono<ResponseEntity<CreatedSafeboxResponseDto>> createSafebox(Mono<SafeboxRequestDto> safeboxRequestDto) {

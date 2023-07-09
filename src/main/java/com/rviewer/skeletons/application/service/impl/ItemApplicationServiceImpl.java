@@ -22,9 +22,7 @@ public class ItemApplicationServiceImpl implements ItemApplicationService {
 
     @Override
     public Mono<ResponseEntity<Flux<SafeboxItemDto>>> getSafeboxItems(Long id) {
-        return Mono.just(
-                ResponseEntity.ok(
-                        itemService.getItems(id).map(itemDtoMapper::map)));
+        return Mono.just(ResponseEntity.ok(itemService.getItems(id).map(itemDtoMapper::map)));
     }
 
     @Override
