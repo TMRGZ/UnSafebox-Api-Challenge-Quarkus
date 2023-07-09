@@ -27,6 +27,11 @@ public class SafeboxServiceImpl implements SafeboxService {
     }
 
     @Override
+    public Mono<Safebox> getSafebox(Long id) {
+        return safeboxRepository.findById(id);
+    }
+
+    @Override
     public Mono<Safebox> getSafebox(String name) {
         return safeboxRepository.findByNameIgnoreCase(name);
     }

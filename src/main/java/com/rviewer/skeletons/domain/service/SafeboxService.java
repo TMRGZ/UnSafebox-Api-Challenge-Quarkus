@@ -7,6 +7,8 @@ public interface SafeboxService {
 
     Mono<Safebox> createSafebox(String safeboxName, String safeboxPassword);
 
+    Mono<Safebox> getSafebox(Long id);
+
     Mono<Safebox> getSafebox(String name);
 
 }
