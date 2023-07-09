@@ -8,3 +8,4 @@ spring:
     user: user
     password: password
     driver-class-name: org.h2.Driver
+    change-log: classpath:/db/changelog/db.changelog-test-master.yaml
