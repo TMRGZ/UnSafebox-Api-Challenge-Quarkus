@@ -6,6 +6,7 @@ import com.rviewer.skeletons.domain.repository.ItemRepository;
 import com.rviewer.skeletons.domain.service.ItemService;
 import com.rviewer.skeletons.domain.service.SafeboxService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -18,9 +19,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Flux<Item> getItems(Long safeboxId) {
-        return safeboxService.getSafebox(safeboxId)
-                .flatMapMany(safebox -> itemRepository.findBySafeboxId(safebox.getId()))
-                .switchIfEmpty(Mono.error(SafeboxDoesNotExistException::new));
+        return safeboxService.getSafebox(safeboxId).hasElement()
+                .flatMapMany(exists -> BooleanUtils.isTrue(exists)
+                        ? itemRepository.findBySafeboxId(safeboxId)
+                        : Mono.error(SafeboxDoesNotExistException::new));
     }
 
     @Override
