@@ -1,10 +1,12 @@
 package com.rviewer.skeletons.domain.service.impl;
 
+import com.rviewer.skeletons.domain.exception.SafeboxAlreadyExistsException;
 import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.domain.repository.SafeboxRepository;
 import com.rviewer.skeletons.domain.service.PasswordManager;
 import com.rviewer.skeletons.domain.service.SafeboxService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -16,7 +18,10 @@ public class SafeboxServiceImpl implements SafeboxService {
 
     @Override
     public Mono<Safebox> createSafebox(String safeboxName, String safeboxPassword) {
-        return safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword));
+        return safeboxRepository.findByNameIgnoreCase(safeboxName)
+                .hasElement().flatMap(exists -> BooleanUtils.isTrue(exists)
+                        ? Mono.error(SafeboxAlreadyExistsException::new)
+                        : safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword)));
     }
 
     private Safebox generateEncodedSafebox(String safeboxName, String safeboxPassword) {
