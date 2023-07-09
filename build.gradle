@@ -84,6 +84,7 @@ tasks.register('buildServer', GenerateTask) {
     modelNameSuffix = "Dto"
     configOptions = [
             interfaceOnly                 : "true",
+            skipDefaultInterface          : "true",
             performBeanValidation         : "true",
             useSpringBoot3                : "true",
             reactive                      : "true",
