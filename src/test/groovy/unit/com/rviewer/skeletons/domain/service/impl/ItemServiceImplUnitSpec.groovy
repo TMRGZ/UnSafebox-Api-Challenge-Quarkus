@@ -1,5 +1,6 @@
 package unit.com.rviewer.skeletons.domain.service.impl
 
+import com.rviewer.skeletons.domain.exception.SafeboxDoesNotExistException
 import com.rviewer.skeletons.domain.model.Item
 import com.rviewer.skeletons.domain.model.Safebox
 import com.rviewer.skeletons.domain.repository.ItemRepository
@@ -34,6 +35,21 @@ class ItemServiceImplUnitSpec extends Specification {
         1 * safeboxService.getSafebox(safeboxId) >> Mono.just(Safebox.builder().id(safeboxId).build())
         and: "It will try to find the related items"
         1 * itemRepository.findBySafeboxId(safeboxId) >> Flux.empty()
+    }
+
+    def "When a non existing safebox id is passed then it will throw an error"() {
+        given: "An non existing safebox id"
+        def safeboxId = 1
+
+        when: "When passing it to the function"
+        itemService.getItems(safeboxId).collectList().block()
+
+        then: "The safebox does not exist"
+        1 * safeboxService.getSafebox(safeboxId) >> Mono.empty()
+        and: "Can't find related items"
+        0 * itemRepository.findBySafeboxId(safeboxId)
+        and: "An exception is thrown"
+        thrown(SafeboxDoesNotExistException)
     }
 
     def "When a safebox id and an item are passed, then it will try to save those related items"() {

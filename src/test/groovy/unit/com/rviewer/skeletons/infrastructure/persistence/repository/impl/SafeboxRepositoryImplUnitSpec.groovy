@@ -26,6 +26,19 @@ class SafeboxRepositoryImplUnitSpec extends Specification {
         )
     }
 
+    def "Providing an id should find the safebox and map it"() {
+        given: "An existing id"
+        def id = 1
+        and: "An existing safebox"
+        def safebox = Safebox.builder().id(id).build()
+
+        when: "The find is executed"
+        safeboxRepository.findById(id)
+
+        then: "A reactive element should be received"
+        1 * reactiveSafeboxRepository.findById(id) >> Mono.just(safebox)
+    }
+
     def "Providing a name should find the safebox and map it"() {
         given: "An existing name"
         def name = "TEST"
