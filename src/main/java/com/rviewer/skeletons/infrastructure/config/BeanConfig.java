@@ -19,7 +19,7 @@ public class BeanConfig {
     }
 
     @Bean
-    public ItemService itemService(ItemRepository itemRepository) {
-        return new ItemServiceImpl(itemRepository);
+    public ItemService itemService(ItemRepository itemRepository, SafeboxService safeboxService) {
+        return new ItemServiceImpl(itemRepository, safeboxService);
     }
 }
