@@ -1,0 +1,168 @@
+openapi: 3.0.0
+
+info:
+  description: |
+    SafeIsh API - The most (in) secure safebox
+  version: 0.0.1
+  title: Unsafebox API
+
+paths:
+  /safebox:
+    post:
+      operationId: create-safebox
+      summary: Creates a new safebox
+      description: |
+        Creates a new safebox based on a non-empty name and a password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafeboxRequest'
+
+      responses:
+        '200':
+          description: Safebox correctly created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedSafeboxResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Safebox already exists
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /safebox/{id}/items:
+    get:
+      operationId: get-safebox-items
+      summary: Retrieves the content of a safebox
+      description: |
+        Retrieves the currently stored contents in the safebox identified by the given ID
+      security:
+        - basicPassword: [ ]
+      parameters:
+        - in: path
+          name: id
+          description: Safebox Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Safebox contents correctly retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SafeboxItem'
+
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      operationId: save-safebox-items
+      summary: Add an items to a Safebox
+      description: |
+        Inserts new contents in the safebox identified by the given ID and with the given Basic Auth
+      security:
+        - basicPassword: [ ]
+      parameters:
+        - in: path
+          name: id
+          description: Safebox id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SafeboxItem'
+
+      responses:
+        '201':
+          description: Content correctly added to the safebox
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+components:
+  securitySchemes:
+    basicPassword:
+      type: http
+      scheme: basic
+
+  responses:
+    BadRequest:
+      description: Malformed expected data
+    NotFound:
+      description: Requested safebox does not exist
+    Unauthorized:
+      description: Specified Basic Auth does not match
+    InternalServerError:
+      description: Unexpected API error
+
+  schemas:
+    CreatedSafeboxResponse:
+      description: Response when Safebox is created
+      type: object
+      properties:
+        id:
+          description: Safebox id
+          type: integer
+          format: int64
+      required:
+        - id
+      example:
+        id: f626c808-648c-41fe-865d-c6062f3e0899
+    SafeboxRequest:
+      description: Safebox request
+      type: object
+      properties:
+        name:
+          description: Safebox Name
+          type: string
+        password:
+          description: Safebox Password
+          type: string
+          pattern: '^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*\d)(?=.*[a-z]).{8,}$'
+      required:
+        - name
+        - password
+      example:
+        name: Secure safebox 01
+        password: extremelySecurePassword
+    SafeboxItem:
+      description: Safebox item
+      type: object
+      properties:
+        content:
+          description: Item content
+          type: string
+
+      required:
+        - items
+      example:
+        item: Safebox content 03
+

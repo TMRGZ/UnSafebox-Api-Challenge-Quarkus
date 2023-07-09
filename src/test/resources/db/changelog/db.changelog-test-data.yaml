@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: insertTestData
+      author: TMRGZ
+      changes:
+        - insert:
+            tableName: SAFEBOX
+            columns:
+              - column:
+                  name: _ID
+                  valueNumeric: "1000001"
+              - column:
+                  name: _NAME
+                  value: EXISTING_SAFEBOX
+              - column:
+                  name: _PASSWORD
+                  value: EXISTING_SAFEBOX
+        - insert:
+            tableName: ITEM
+            columns:
+              - column:
+                  name: _CONTENT
+                  value: EXISTING_ITEM
+              - column:
+                  name: SAFEBOX_ID
+                  valueNumeric: "1000001"
