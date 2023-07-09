@@ -53,6 +53,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
     testImplementation 'io.r2dbc:r2dbc-h2'
+    testImplementation 'com.h2database:h2:2.1.214'
     // Liquibase
     implementation "org.liquibase:liquibase-core"
     // Liquibase Plugin
