@@ -1,1 +1,12 @@
-rootProject.name = 'rviewer-skeleton-java-spring'
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id "${quarkusPluginId}" version "${quarkusPluginVersion}"
+    }
+}
+
+rootProject.name = 'rviewer-skeleton-java-quarkus'

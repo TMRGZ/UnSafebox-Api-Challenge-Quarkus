@@ -3,13 +3,11 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    id 'org.springframework.boot' version '3.1.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.quarkus'
     id 'java'
     id 'groovy'
     id 'jacoco'
-    id "org.openapi.generator" version "6.6.0"
-    id 'org.liquibase.gradle' version '2.2.0'
+    id "org.openapi.generator" version "7.0.0"
 }
 
 group = 'com.rviewer.skeletons'
@@ -26,73 +24,61 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux:3.1.1'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-arc'
+    implementation 'io.quarkus:quarkus-resteasy-reactive'
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+
     // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
     // Swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0'
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
     // Map Struct
     implementation 'org.mapstruct:mapstruct:1.4.0.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.0.Final'
     // API First
     implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
     // Testing
-    testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test:3.5.6'
+    testImplementation 'io.quarkiverse.groovy:quarkus-groovy-junit5:3.2.2'
     // Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test:6.1.1'
+    implementation 'io.quarkus:quarkus-security'
     // Database
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    runtimeOnly 'org.postgresql:postgresql'
-    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
-    testImplementation 'io.r2dbc:r2dbc-h2'
+    implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
+    runtimeOnly 'io.quarkus:quarkus-reactive-pg-client'
     testImplementation 'com.h2database:h2:2.1.214'
     // Liquibase
-    implementation "org.liquibase:liquibase-core"
-    // Liquibase Plugin
-    liquibaseRuntime 'org.liquibase:liquibase-core:4.16.1'
-    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
-    liquibaseRuntime 'info.picocli:picocli:4.6.1'
-    liquibaseRuntime 'org.postgresql:postgresql'
-}
+    implementation "io.quarkus:quarkus-liquibase"
 
-liquibase {
-    activities {
-        main {
-            changeLogFile 'build/liquibase_change_log.yaml'
-            url 'jdbc:postgresql://localhost:5432/postgres_rv_database'
-            username 'rv_user'
-            password 'rv_password'
-            driver 'org.postgresql.Driver'
-        }
-    }
 }
 
 tasks.register('buildServer', GenerateTask) {
-    generatorName = "spring"
+    generatorName = "jaxrs-spec"
     inputSpec = "$rootDir/api/open-api.spec.yaml"
     apiPackage = "com.rviewer.skeletons.infrastructure.controller"
     modelPackage = "com.rviewer.skeletons.application.model"
     outputDir = "$buildDir/generated/sources".toString()
     modelNameSuffix = "Dto"
     configOptions = [
+            sourceFolder                  : "src/main/java",
+            library                       : "quarkus",
+            dateLibrary                   : "java8",
+            generateBuilders              : "true",
             interfaceOnly                 : "true",
             skipDefaultInterface          : "true",
-            performBeanValidation         : "true",
-            useSpringBoot3                : "true",
-            reactive                      : "true",
+            useSwaggerAnnotations         : "false",
+            useTags                       : "true",
+            useJakartaEe                  : "true",
             additionalModelTypeAnnotations: "@lombok.Generated"
+    ]
+    globalProperties = [
+            apiTests  : "false",
+            modelTests: "false"
     ]
 
 }
