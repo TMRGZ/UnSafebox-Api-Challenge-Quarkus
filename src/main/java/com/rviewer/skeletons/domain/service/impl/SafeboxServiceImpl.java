@@ -5,10 +5,9 @@ import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.domain.repository.SafeboxRepository;
 import com.rviewer.skeletons.domain.service.PasswordManager;
 import com.rviewer.skeletons.domain.service.SafeboxService;
+import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.BooleanUtils;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,15 +18,14 @@ public class SafeboxServiceImpl implements SafeboxService {
     private final PasswordManager passwordManager;
 
     @Override
-    public Mono<Safebox> createSafebox(String safeboxName, String safeboxPassword) {
+    public Uni<Safebox> createSafebox(String safeboxName, String safeboxPassword) {
         log.info("Creating safebox with name {} and password (hidden)", safeboxName);
-        return getSafebox(safeboxName).hasElement().flatMap(exists -> BooleanUtils.isFalse(exists)
-                ? safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword))
-                : Mono.error(() -> {
+        return getSafebox(safeboxName)
+                .onItem().ifNotNull().failWith(() -> {
                     log.error("Safebox {} already exists, cancelling...", safeboxName);
                     return new SafeboxAlreadyExistsException();
-                }
-        ));
+                })
+                .invoke(() -> safeboxRepository.save(generateEncodedSafebox(safeboxName, safeboxPassword)));
     }
 
     private Safebox generateEncodedSafebox(String safeboxName, String safeboxPassword) {
@@ -39,13 +37,13 @@ public class SafeboxServiceImpl implements SafeboxService {
     }
 
     @Override
-    public Mono<Safebox> getSafebox(Long id) {
+    public Uni<Safebox> getSafebox(Long id) {
         log.info("Retrieving safebox {}", id);
         return safeboxRepository.findById(id);
     }
 
     @Override
-    public Mono<Safebox> getSafebox(String name) {
+    public Uni<Safebox> getSafebox(String name) {
         log.info("Retrieving safebox with name {}", name);
         return safeboxRepository.findByNameIgnoreCase(name);
     }

@@ -1,12 +1,12 @@
 package com.rviewer.skeletons.domain.repository;
 
 import com.rviewer.skeletons.domain.model.Item;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 
 public interface ItemRepository {
 
-    Flux<Item> findBySafeboxId(Long safeboxId);
+    Multi<Item> findBySafeboxId(Long safeboxId);
 
-    Mono<Item> save(Item item);
+    Uni<Item> save(Item item);
 }

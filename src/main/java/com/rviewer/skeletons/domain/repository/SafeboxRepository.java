@@ -1,13 +1,13 @@
 package com.rviewer.skeletons.domain.repository;
 
 import com.rviewer.skeletons.domain.model.Safebox;
-import reactor.core.publisher.Mono;
+import io.smallrye.mutiny.Uni;
 
 public interface SafeboxRepository {
 
-    Mono<Safebox> findById(Long id);
+    Uni<Safebox> findById(Long id);
 
-    Mono<Safebox> findByNameIgnoreCase(String name);
+    Uni<Safebox> findByNameIgnoreCase(String name);
 
-    Mono<Safebox> save(Safebox safebox);
+    Uni<Safebox> save(Safebox safebox);
 }

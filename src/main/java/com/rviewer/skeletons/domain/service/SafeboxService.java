@@ -1,14 +1,15 @@
 package com.rviewer.skeletons.domain.service;
 
 import com.rviewer.skeletons.domain.model.Safebox;
+import io.smallrye.mutiny.Uni;
 import reactor.core.publisher.Mono;
 
 public interface SafeboxService {
 
-    Mono<Safebox> createSafebox(String safeboxName, String safeboxPassword);
+    Uni<Safebox> createSafebox(String safeboxName, String safeboxPassword);
 
-    Mono<Safebox> getSafebox(Long id);
+    Uni<Safebox> getSafebox(Long id);
 
-    Mono<Safebox> getSafebox(String name);
+    Uni<Safebox> getSafebox(String name);
 
 }

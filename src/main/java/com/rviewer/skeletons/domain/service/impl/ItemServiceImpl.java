@@ -5,11 +5,10 @@ import com.rviewer.skeletons.domain.model.Item;
 import com.rviewer.skeletons.domain.repository.ItemRepository;
 import com.rviewer.skeletons.domain.service.ItemService;
 import com.rviewer.skeletons.domain.service.SafeboxService;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.BooleanUtils;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,26 +19,25 @@ public class ItemServiceImpl implements ItemService {
     private final SafeboxService safeboxService;
 
     @Override
-    public Flux<Item> getItems(Long safeboxId) {
+    public Multi<Item> getItems(Long safeboxId) {
         log.info("Getting items from safebox {}", safeboxId);
-        return safeboxService.getSafebox(safeboxId).hasElement().flatMapMany(exists -> BooleanUtils.isTrue(exists)
-                ? itemRepository.findBySafeboxId(safeboxId)
-                : Mono.error(() -> {
+        return safeboxService.getSafebox(safeboxId)
+                .onItem().ifNull().failWith(() -> {
                     log.error("Safebox {} does not exist, cancelling...", safeboxId);
                     return new SafeboxDoesNotExistException();
-                }
-        ));
+                })
+                .onItem().transformToMulti(safebox -> itemRepository.findBySafeboxId(safebox.getId()));
     }
 
     @Override
-    public Mono<Item> save(Long safeboxId, Item item) {
+    public Uni<Item> save(Long safeboxId, Item item) {
         log.info("Storing item {} into safebox {}", item, safeboxId);
         return safeboxService.getSafebox(safeboxId)
-                .map(safebox -> item.toBuilder().safeboxId(safebox.getId()).build())
-                .flatMap(itemRepository::save)
-                .switchIfEmpty(Mono.error(() -> {
+                .onItem().ifNull().failWith(() -> {
                     log.error("Safebox with id={} does not exist, cancelling...", safeboxId);
                     return new SafeboxDoesNotExistException();
-                }));
+                })
+                .map(safebox -> item.toBuilder().safeboxId(safebox.getId()).build())
+                .flatMap(itemRepository::save);
     }
 }
