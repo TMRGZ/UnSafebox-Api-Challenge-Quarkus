@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
                     log.error("Safebox {} does not exist, cancelling...", safeboxId);
                     return new SafeboxDoesNotExistException();
                 })
-                .onItem().transformToMulti(safebox -> itemRepository.findBySafeboxId(safebox.getId()));
+                .onItem().transformToMulti(itemRepository::findBySafebox);
     }
 
     @Override

@@ -1,30 +1,36 @@
 package com.rviewer.skeletons.infrastructure.persistence.repository.impl;
 
 import com.rviewer.skeletons.domain.model.Item;
+import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.domain.repository.ItemRepository;
 import com.rviewer.skeletons.infrastructure.mapper.ItemMapper;
+import com.rviewer.skeletons.infrastructure.mapper.SafeboxMapper;
 import com.rviewer.skeletons.infrastructure.persistence.repository.ReactiveItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
-@Component
+@ApplicationScoped
+@RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepository {
 
-    @Autowired
-    private ReactiveItemRepository reactiveItemRepository;
+    private final ReactiveItemRepository reactiveItemRepository;
 
-    @Autowired
-    private ItemMapper itemMapper;
+    private final SafeboxMapper safeboxMapper;
+
+    private final ItemMapper itemMapper;
 
     @Override
-    public Flux<Item> findBySafeboxId(Long safeboxId) {
-        return reactiveItemRepository.findBySafeboxId(safeboxId).map(itemMapper::map);
+    public Multi<Item> findBySafebox(Safebox safebox) {
+        return reactiveItemRepository.findBySafeboxId(safeboxMapper.map(safebox))
+                .onItem().transformToMulti(Multi.createFrom()::iterable)
+                .map(itemMapper::map);
     }
 
     @Override
-    public Mono<Item> save(Item item) {
-        return reactiveItemRepository.save(itemMapper.map(item)).map(itemMapper::map);
+    public Uni<Item> save(Item item) {
+        return reactiveItemRepository.persist(itemMapper.map(item))
+                .map(itemMapper::map);
     }
 }

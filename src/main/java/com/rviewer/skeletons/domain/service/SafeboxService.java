@@ -2,7 +2,6 @@ package com.rviewer.skeletons.domain.service;
 
 import com.rviewer.skeletons.domain.model.Safebox;
 import io.smallrye.mutiny.Uni;
-import reactor.core.publisher.Mono;
 
 public interface SafeboxService {
 

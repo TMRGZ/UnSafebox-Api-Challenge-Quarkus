@@ -1,26 +1,30 @@
 package com.rviewer.skeletons.infrastructure.persistence.dao;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.experimental.FieldNameConstants;
 
 @Getter
 @Setter
 @Builder
-@Table("ITEM")
+@Table(name = "ITEM")
+@FieldNameConstants
 public class ItemDao {
 
     @Id
-    @Column("_ID")
+    @Column(name = "_ID")
     private Long id;
 
-    @Column("_CONTENT")
+    @Column(name = "_CONTENT")
     private String content;
 
-    @Column("SAFEBOX_ID")
-    private Long safeboxId;
+    @Column(name = "SAFEBOX_ID")
+    @ManyToOne(optional = false)
+    private SafeboxDao safebox;
 
 }

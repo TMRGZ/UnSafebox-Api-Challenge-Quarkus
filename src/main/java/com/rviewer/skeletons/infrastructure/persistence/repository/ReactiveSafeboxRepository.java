@@ -1,13 +1,15 @@
 package com.rviewer.skeletons.infrastructure.persistence.repository;
 
 import com.rviewer.skeletons.infrastructure.persistence.dao.SafeboxDao;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
+import io.quarkus.hibernate.reactive.panache.PanacheRepository;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@Repository
-public interface ReactiveSafeboxRepository extends ReactiveCrudRepository<SafeboxDao, Long> {
+@ApplicationScoped
+public class ReactiveSafeboxRepository implements PanacheRepository<SafeboxDao> {
 
-    Mono<SafeboxDao> findByNameIgnoreCase(String name);
+    public Uni<SafeboxDao> findByNameIgnoreCase(String name) {
+        return find(SafeboxDao.Fields.name, name).firstResult();
+    }
 
 }

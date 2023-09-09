@@ -3,7 +3,6 @@ package com.rviewer.skeletons.domain.service.impl;
 import com.rviewer.skeletons.domain.exception.SafeboxAlreadyExistsException;
 import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.domain.repository.SafeboxRepository;
-import com.rviewer.skeletons.domain.service.PasswordManager;
 import com.rviewer.skeletons.domain.service.SafeboxService;
 import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SafeboxServiceImpl implements SafeboxService {
 
     private final SafeboxRepository safeboxRepository;
-
-    private final PasswordManager passwordManager;
 
     @Override
     public Uni<Safebox> createSafebox(String safeboxName, String safeboxPassword) {
@@ -32,7 +29,7 @@ public class SafeboxServiceImpl implements SafeboxService {
         log.info("Encoding password for new safebox {}", safeboxName);
         return Safebox.builder()
                 .name(safeboxName)
-                .password(passwordManager.encode(safeboxPassword))
+                .password(safeboxPassword)
                 .build();
     }
 

@@ -48,6 +48,7 @@ dependencies {
     testImplementation 'io.quarkiverse.groovy:quarkus-groovy-junit5:3.2.2'
     // Security
     implementation 'io.quarkus:quarkus-security'
+    implementation 'io.quarkus:quarkus-security-jpa-reactive'
     // Database
     implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
     runtimeOnly 'io.quarkus:quarkus-reactive-pg-client'

@@ -1,13 +1,17 @@
 package com.rviewer.skeletons.infrastructure.persistence.repository;
 
 import com.rviewer.skeletons.infrastructure.persistence.dao.ItemDao;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
+import com.rviewer.skeletons.infrastructure.persistence.dao.SafeboxDao;
+import io.quarkus.hibernate.reactive.panache.PanacheRepository;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@Repository
-public interface ReactiveItemRepository extends ReactiveCrudRepository<ItemDao, Long> {
+import java.util.List;
 
-    Flux<ItemDao> findBySafeboxId(Long safeboxId);
+@ApplicationScoped
+public class ReactiveItemRepository implements PanacheRepository<ItemDao> {
 
+    public Uni<List<ItemDao>> findBySafeboxId(SafeboxDao safebox) {
+        return list(ItemDao.Fields.safebox, safebox);
+    }
 }
