@@ -4,7 +4,7 @@ import com.rviewer.skeletons.domain.model.Safebox;
 import com.rviewer.skeletons.infrastructure.persistence.dao.SafeboxDao;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "cdi")
 public interface SafeboxMapper {
 
     SafeboxDao map(Safebox safebox);
